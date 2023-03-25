@@ -1,23 +1,29 @@
-import logo from './logo.svg';
+
 import './App.css';
+import Acomponent from './Components/Acomponent';
+import { createContext, useState } from 'react';
+import { useEffect } from 'react';
+export const GlobalData=createContext();
 
 function App() {
+  const [data,shareData]=useState([]);
+  useEffect(() => {
+    getUserData();
+  }, [])
+  const [pass,passData]=useState([]);
+async function getUserData(){
+  const streamResponse=await fetch(`https://randomuser.me/api/?results=20`);
+  const textResponse=await streamResponse.text();
+  const jsonData=JSON.parse(textResponse);
+  // console.log(jsonData)
+  passData(jsonData)
+}
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <GlobalData.Provider value={{data,shareData,pass,passData}}>
+      <Acomponent/>
+      </GlobalData.Provider>
     </div>
   );
 }

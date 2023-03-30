@@ -1,29 +1,23 @@
 
 import './App.css';
-import Acomponent from './Components/Acomponent';
-import { createContext, useState } from 'react';
-import { useEffect } from 'react';
-export const GlobalData=createContext();
-
+import Header from './components/Header';
+import ProductListing from './components/ProductListing';
+import {Routes, Route } from "react-router-dom";
+import PageNotFound from './components/PageNotFound';
+import ProductDetails from './components/ProductDetails';
 function App() {
-  const [data,shareData]=useState([]);
-  useEffect(() => {
-    getUserData();
-  }, [])
-  const [pass,passData]=useState([]);
-async function getUserData(){
-  const streamResponse=await fetch(`https://randomuser.me/api/?results=20`);
-  const textResponse=await streamResponse.text();
-  const jsonData=JSON.parse(textResponse);
-  // console.log(jsonData)
-  passData(jsonData)
-}
+  
 
   return (
     <div className="App">
-      <GlobalData.Provider value={{data,shareData,pass,passData}}>
-      <Acomponent/>
-      </GlobalData.Provider>
+      <Header/>
+      <Routes>
+      <Route path='/' element={<ProductListing/>}/>
+      <Route path='/product' element={<ProductListing/>}/>
+      <Route path='/product/:id' element={<ProductDetails/>}/>
+      <Route path='/*' element={<PageNotFound/>}/>
+      </Routes>
+        
     </div>
   );
 }
